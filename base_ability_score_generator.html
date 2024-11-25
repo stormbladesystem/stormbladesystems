@@ -1,0 +1,167 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+   <meta charset="UTF-8">  
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+   <title>d&d base stat generator</title>  
+   <style>  
+      body {  
+        font-family: Arial, sans-serif;  
+        background-color: #f4f4f4;  
+        color: #333;  
+        padding: 20px;  
+      }  
+      button {  
+        padding: 10px 15px;  
+        background-color: #5cb85c;  
+        color: white;  
+        border: none;  
+        cursor: pointer;  
+        border-radius: 5px;  
+      }  
+      button:hover {  
+        background-color: #4cae4c;  
+      }  
+      #output {  
+        margin-top: 20px;  
+        padding: 10px;  
+        border: 1px solid #ccc;  
+        background-color: #fff;  
+      }  
+   </style>  
+</head>  
+<body>  
+  
+   <h1>ability score generator</h1>  
+    <table border="1" style="width: 50%; text-align: center; border-collapse: collapse;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th>Ability Scores</th>
+            <th>Modifiers</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>−5</td>
+        </tr>
+        <tr>
+            <td>2–3</td>
+            <td>−4</td>
+        </tr>
+        <tr>
+            <td>4–5</td>
+            <td>−3</td>
+        </tr>
+        <tr>
+            <td>6–7</td>
+            <td>−2</td>
+        </tr>
+        <tr>
+            <td>8–9</td>
+            <td>−1</td>
+        </tr>
+        <tr>
+            <td>10–11</td>
+            <td>+0</td>
+        </tr>
+        <tr>
+            <td>12–13</td>
+            <td>+1</td>
+        </tr>
+        <tr>
+            <td>14–15</td>
+            <td>+2</td>
+        </tr>
+        <tr>
+            <td>16–17</td>
+            <td>+3</td>
+        </tr>
+        <tr>
+            <td>18–19</td>
+            <td>+4</td>
+        </tr>
+        <tr>
+            <td>20–21</td>
+            <td>+5</td>
+        </tr>
+        <tr>
+            <td>22–23</td>
+            <td>+6</td>
+        </tr>
+        <tr>
+            <td>24–25</td>
+            <td>+7</td>
+        </tr>
+        <tr>
+            <td>26–27</td>
+            <td>+8</td>
+        </tr>
+        <tr>
+            <td>28–29</td>
+            <td>+9</td>
+        </tr>
+        <tr>
+            <td>30</td>
+            <td>+10</td>
+        </tr>
+    </tbody>
+</table>
+   <button onclick="executeJavaScript()">Click Me!</button>  
+   <div id="output"></div>  
+  
+   <script>  
+      function executeJavaScript() {  
+       function rollDice(numDice = 4, sides = 6, minReroll = 3) {  
+  /** Rolls dice and applies the specified rerolling and dropping rules.  
+   
+  Args:  
+   numDice: The number of dice to roll.  
+   sides: The number of sides on each die.  
+   minReroll: The minimum value to re-roll.  
+   
+  Returns:  
+   The final result after applying all rules.  
+  */  
+  
+  let rolls = Array.from({ length: numDice }, () => Math.floor(Math.random() * sides) + 1);  
+  
+  // Reroll all dice below minReroll until no 1s or 2s remain  
+  while (rolls.some(roll => roll < minReroll)) {  
+   rolls = rolls.map(roll => (roll < minReroll ? Math.floor(Math.random() * sides) + 1 : roll));  
+  }  
+  
+  // Find the lowest dice  
+  const lowestRolls = [...rolls].sort((a, b) => a - b).slice(0, 2);  
+  
+  // Reroll only one of the lowest dice if they are tied  
+  if (lowestRolls[0] === lowestRolls[1]) {  
+   rolls[rolls.indexOf(lowestRolls[0])] = Math.floor(Math.random() * sides) + 1;  
+  } else {  
+   rolls[rolls.indexOf(lowestRolls[0])] = Math.floor(Math.random() * sides) + 1;  
+  }  
+  
+  // Drop the lowest die  
+  rolls.splice(rolls.indexOf(Math.min(...rolls)), 1);  
+  
+  // Sum the remaining dice  
+  return rolls.reduce((a, b) => a + b, 0);  
+}  
+  
+// Run the code 6 times  
+for (let i = 1; i <= 6; i++) {  // Start from 1 to show the result number  
+  const result = rollDice();  
+  writeToTextbox(i, result);  
+}  
+   
+  function writeToTextbox(i, result) {  
+        const output = document.getElementById('output');  
+        const message = `Result ${i}: ${result}`;  
+        output.innerHTML += message + '<br>'; // Append message to div  
+        console.log(message); // Log the message to the console as well  
+      }  
+              }  
+   </script>  
+  
+</body>  
+</html>
